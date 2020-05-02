@@ -1,0 +1,48 @@
+@charset "UTF-8";
+/**
+ *     @author İsa Eken <hello@isaeken.com.tr>
+ *     @website https://isaeken.com.tr
+ *     @github https://github.com/isaeken
+ *     @name jquery.toast
+ */
+.toast-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  padding-left: 0rem;
+  padding-right: 0rem;
+  user-select: none;
+}
+.toast-container .toast {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: #111111;
+  color: #ffffff;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+.toast-container .toast .close {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  background-color: #373737;
+  border-radius: 0.3rem;
+  color: #ffffff;
+  margin-left: 0.5rem;
+  margin-right: -0.5rem;
+  padding: 0 0.5rem;
+}
+
+/*# sourceMappingURL=jquery.toasts.css.map */

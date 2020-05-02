@@ -1,0 +1,72 @@
+/**
+ *     @author İsa Eken <hello@isaeken.com.tr>
+ *     @website https://isaeken.com.tr
+ *     @github https://github.com/isaeken
+ *     @name jquery.toast
+ */
+
+$toast-container-padding-x: 0rem;
+$toast-container-padding-y: 0rem;
+
+$toast-font-family:   'Helvetica Neue', Helvetica, Arial, sans-serif !default;
+$toast-font-size:     16px !default;
+$toast-line-height:   1.5 !default;
+
+$toast-padding-x:  1.5rem !default;
+$toast-padding-y:  0.5rem !default;
+$toast-margin-x:     1rem !default;
+$toast-margin-y:     1rem !default;
+
+$toast-background:    #111111 !default;
+$toast-foreground:    #ffffff !default;
+$toast-border:        none  !default;
+$toast-border-radius: .5rem !default;
+$toast-shadow:        0 4px 8px rgba(0, 0, 0, 0.15) !default;
+
+.toast-container
+{
+  position: fixed;
+  top: 0; right: 0;
+  padding-top:    $toast-container-padding-y;
+  padding-bottom: $toast-container-padding-y;
+  padding-left:   $toast-container-padding-x;
+  padding-right:  $toast-container-padding-x;
+  user-select: none;
+
+  .toast
+  {
+    font-family:      $toast-font-family;
+    font-size:        $toast-font-size;
+    line-height:      $toast-line-height;
+    background-color: $toast-background;
+    color:            $toast-foreground;
+
+    margin-top:       $toast-margin-y;
+    margin-bottom:    $toast-margin-y;
+    margin-left:      $toast-margin-x;
+    margin-right:     $toast-margin-x;
+
+    padding-top:      $toast-padding-y;
+    padding-bottom:   $toast-padding-y;
+    padding-left:     $toast-padding-x;
+    padding-right:    $toast-padding-x;
+
+    border:           $toast-border;
+    border-radius:    $toast-border-radius;
+
+    box-shadow:       $toast-shadow;
+
+    .close
+    {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      background-color: lighten($toast-background, 15);
+      border-radius: .3rem;
+      color: $toast-foreground;
+      margin-left: .5rem;
+      margin-right: -.5rem;
+      padding: 0 .5rem;
+    }
+  }
+}

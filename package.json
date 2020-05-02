@@ -1,0 +1,33 @@
+{
+  "name": "jquery-toasts",
+  "description": "The simplest toasts for jQuery",
+  "homepage": "https://github.com/isaeken/jquery-toasts",
+  "author": "İsa Eken <hello@isaeken.com.tr> (https://www.isaeken.com.tr)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaeken/jquery-toasts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/isaeken/jquery-toasts/issues"
+  },
+  "license": "MIT",
+  "version": "0.0.1",
+  "main": "jquery.toasts.js",
+  "style": "jquery.toasts.css",
+  "dependencies": {
+    "jquery": "^3.5.0"
+  },
+  "devDependencies": {
+    "jQuery": "^1.7.4"
+  },
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "jquery",
+    "toast"
+  ]
+}
