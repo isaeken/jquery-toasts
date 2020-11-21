@@ -10,7 +10,9 @@ var gulp          = require('gulp'),
     cssbeautify   = require('gulp-cssbeautify'),
     autoprefixer  = require('autoprefixer'),
     sass          = require('gulp-sass'),
-    del           = require('del');
+    del           = require('del')
+    minifyCss     = require('gulp-minify-css')
+    sourcemaps    = require('gulp-sourcemaps');
 
 sass.compiler     = require('node-sass');
 var Server        = require('karma').Server;
@@ -66,6 +68,9 @@ function build_css(cb) {
 function build_scss(cb) {
     gulp.src(SRC_SCSS)
         .pipe(sass({outputStyle:'expanded'}).on('error', sass.logError))
+        .pipe(gulp.dest(DEST_SCSS))
+        .pipe(minifyCss())
+        .pipe(rename({ extname: '.min.css' }))
         .pipe(gulp.dest(DEST_SCSS));
 
     cb();
