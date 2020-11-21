@@ -17,9 +17,9 @@ var Server        = require('karma').Server;
 var browserSync   = require('browser-sync').create();
 
 // Specify the Source files
-var SRC_JS        = 'src/js/*.js';
+var SRC_JS        = 'src/js/jquery-toasts.js';
 var SRC_CSS       = 'src/css/*.css';
-var SRC_SCSS      = 'src/scss/*.scss';
+var SRC_SCSS      = 'src/scss/jquery-toasts.scss';
 
 // Specify the Destination folders
 var DEST_JS       = 'dist/js';
