@@ -125,7 +125,7 @@ if (!window.jQuery) {
 
         // return self for chained functions
         return this;
-    }
+    };
 
     // add toasts plugin to jquery
     $.fn.toast = function () { return this; };
@@ -149,6 +149,6 @@ $(document).ready(() => {
 
             // create toast
             $.toast(content, timeout);
-        })
+        });
     });
 });
