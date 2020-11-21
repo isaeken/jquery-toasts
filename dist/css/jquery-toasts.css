@@ -15,6 +15,7 @@
   padding-right: 0rem;
   user-select: none;
 }
+
 .toast-container .toast {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -33,16 +34,15 @@
   border-radius: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
+
 .toast-container .toast .close {
   position: relative;
   display: inline-block;
   cursor: pointer;
   background-color: #373737;
-  border-radius: 0.3rem;
+  border-radius: .3rem;
   color: #ffffff;
-  margin-left: 0.5rem;
-  margin-right: -0.5rem;
-  padding: 0 0.5rem;
+  margin-left: .5rem;
+  margin-right: -.5rem;
+  padding: 0 .5rem;
 }
-
-/*# sourceMappingURL=jquery.toasts.css.map */
