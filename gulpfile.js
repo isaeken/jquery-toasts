@@ -107,8 +107,8 @@ function serve(cb) {
     // Serve files from the root of this project
     browserSync.init({
         server: {
-            baseDir: ["examples", "dist"],
-            index: "index.html"
+            baseDir: './',
+            index: "examples/index.html"
         }
     });
 
