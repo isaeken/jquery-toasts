@@ -27,7 +27,7 @@ var DEST_CSS      = 'dist/css';
 var DEST_SCSS     = 'dist/css';
 
 // Example pages
-var EXAMPLE_HTML  = 'examples/*.html';
+var EXAMPLE_HTML  = 'docs/*.html';
 
 // BUILD JS
 function build_js(cb) {
@@ -108,7 +108,7 @@ function serve(cb) {
     browserSync.init({
         server: {
             baseDir: './',
-            index: "examples/index.html"
+            index: "docs/index.html"
         }
     });
 
