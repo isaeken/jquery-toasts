@@ -5,34 +5,71 @@
  *     @name jquery.toast
  */
 
+/**
+ * .toast-container
+ */
+$toasts-container-align:  'top-right' !default;
+$toasts-container-padding: (
+        'left': 0rem,
+        'right': 0rem,
+        'top': 0rem,
+        'bottom': 0rem,
+) !default;
+$toasts-container-margin: (
+        'left': 0rem,
+        'right': 0rem,
+        'top': 0rem,
+        'bottom': 0rem,
+) !default;
 
-$toast-container-padding-x: 0rem;
-$toast-container-padding-y: 0rem;
-
-$toast-font-family:   'Helvetica Neue', Helvetica, Arial, sans-serif !default;
+/**
+ * .toast-container .toast
+ */
+$toast-font-family:  'Helvetica Neue', Helvetica, Arial, sans-serif !default;
 $toast-font-size:     16px !default;
 $toast-line-height:   1.5 !default;
-
-$toast-padding-x:  1.5rem !default;
-$toast-padding-y:  0.5rem !default;
-$toast-margin-x:     1rem !default;
-$toast-margin-y:     1rem !default;
-
-$toast-background:    #111111 !default;
+$toast-cursor:        default !default;
+$toast-background:    rgba(0, 0, 0, 0.9) !default;
 $toast-foreground:    #ffffff !default;
 $toast-border:        none  !default;
-$toast-border-radius: .5rem !default;
-$toast-shadow:        0 4px 8px rgba(0, 0, 0, 0.15) !default;
+$toast-border-radius: .3rem !default;
+$toast-shadow:        0 4px 16px rgba(0, 0, 0, 0.4) !default;
+$toast-padding: (
+        'left':   1rem,
+        'right':  1rem,
+        'top':    0.6rem,
+        'bottom': 0.6rem,
+) !default;
+$toast-margin: (
+        'left':   1rem,
+        'right':  1rem,
+        'top':    1rem,
+        'bottom': 1rem,
+) !default;
 
 .toast-container
 {
   position: fixed;
-  top: 0; right: 0;
-  padding-top:    $toast-container-padding-y;
-  padding-bottom: $toast-container-padding-y;
-  padding-left:   $toast-container-padding-x;
-  padding-right:  $toast-container-padding-x;
+  display: block;
   user-select: none;
+  @each $name, $padding in $toasts-container-padding {
+    padding-#{$name}: $padding;
+  }
+  @each $name, $margin in $toasts-container-margin {
+    margin-#{$name}: $margin;
+  }
+  @if $toasts-container-align == 'top-left' {
+    top: 0; left: 0;
+  }
+  @elseif $toasts-container-align == 'top-right' {
+    top: 0; right: 0;
+  }
+  @elseif $toasts-container-align == 'bottom-left' {
+    bottom: 0; left: 0;
+  }
+  @elseif $toasts-container-align == 'bottom-right' {
+    bottom: 0; right: 0;
+  }
 
   .toast
   {
@@ -41,21 +78,17 @@ $toast-shadow:        0 4px 8px rgba(0, 0, 0, 0.15) !default;
     line-height:      $toast-line-height;
     background-color: $toast-background;
     color:            $toast-foreground;
-
-    margin-top:       $toast-margin-y;
-    margin-bottom:    $toast-margin-y;
-    margin-left:      $toast-margin-x;
-    margin-right:     $toast-margin-x;
-
-    padding-top:      $toast-padding-y;
-    padding-bottom:   $toast-padding-y;
-    padding-left:     $toast-padding-x;
-    padding-right:    $toast-padding-x;
-
     border:           $toast-border;
     border-radius:    $toast-border-radius;
-
     box-shadow:       $toast-shadow;
+    cursor:           $toast-cursor;
+
+    @each $name, $padding in $toast-padding {
+      padding-#{$name}: $padding;
+    }
+    @each $name, $margin in $toast-margin {
+      margin-#{$name}: $margin;
+    }
 
     .close
     {
