@@ -5,131 +5,150 @@
  *     @name jquery.toast
  */
 
-if (!window.jQuery) console.error('Toasts required jQuery.')
-else
-{
-    (function ($) {
+/**
+ * throw an error if jquery is not initialized
+ */
+if (!window.jQuery) {
+    throw 'jquery-toasts is requires jquery!';
+}
 
-        // debug mode
-        var debug = true;
-        function log(content) {
-            if (debug) console.log(content)
+(function ($) {
+    /**
+     * toast container
+     * @type {jQuery.fn.init|jQuery|HTMLElement}
+     */
+    const container = $('<div id="isaeken-jquery-toast-container" class="toast-container"></div>');
+
+    /**
+     * initialize the toasts container
+     * @returns {initializeToasts}
+     */
+    function initializeToasts() {
+        // get the document body
+        const body = $('body');
+
+        // do not any think if container is exists
+        if (body.find('#isaeken-jquery-toast-container').length > 0) return;
+
+        // add container to document body
+        body.prepend(container);
+
+        // return self for chained functions
+        return this;
+    }
+
+    /**
+     * Create toast function
+     * @param content
+     * @param {int} timeout
+     * @param {function} click
+     * @param {function} closed
+     * @param {function} mouseEnter
+     * @param {function} mouseLeave
+     * @returns {jQuery}
+     */
+    $.toast = function (
+        content,
+        timeout = 3000,
+        click = function () { },
+        closed = function () { },
+        mouseEnter = function () { },
+        mouseLeave = function () { },
+    ) {
+        // initialize toasts
+        initializeToasts();
+
+        // create a toast element
+        const $toast = $('<div class="toast"></div>');
+
+        // set toast defaults
+        $toast.attr('isaeken-jquery-toast', 'true').hide().html(content);
+
+        // add toast to container
+        container.append($toast);
+
+        // find close button if exists
+        $toast.find('.close').click(function () {
+            $toast.toastClose();
+        });
+
+        // create close timeout && create closed event
+        let closeTimeoutHandle = window.setTimeout(function () {
+            $toast.toastClose(function () {
+                closed();
+            });
+        }, timeout);
+
+        // add events to toast
+        $toast
+            .on('click', function () {
+                click();
+            })
+            .on('mouseenter', function () {
+                // reset timeout
+                window.clearTimeout(closeTimeoutHandle);
+                mouseEnter();
+            })
+            .on('mouseleave', function () {
+                // start time to close
+                closeTimeoutHandle = window.setTimeout(function () {
+                    $toast.toastClose(function () {
+                        closed();
+                    });
+                }, timeout);
+                mouseLeave();
+            });
+
+        // show toast
+        $toast.slideDown('fast');
+
+        // return self for chained functions
+        return this;
+    };
+
+    // toast close function
+    $.fn.toastClose = function (callback = function () { }) {
+
+        // do not any think if its not a toast
+        if (!$(this)[0].hasAttribute('isaeken-jquery-toast')) {
+            return;
         }
 
-        // container
-        var $toast_container = null;
-        function checkToastContainer() {
-            log('check container is exists')
-            if ($toast_container == null) {
-                log('container is not exists create one')
-                var $container = $('<div></div>')
-                $container.addClass('toast-container')
-                $container.attr('id', 'isaekenjquerytoasts' + Math.random(Math.random() * 101))
-                $('body').append($container)
-                $toast_container = $container
+        // close toast
+        $(this).slideUp('fast');
+
+        // check if callback is a function
+        if (typeof callback === 'function') {
+            // execute callback function
+            callback();
+        }
+
+        // return self for chained functions
+        return this;
+    }
+
+    // add toasts plugin to jquery
+    $.fn.toast = function () { return this; };
+    window.jQuery = $;
+}) (jQuery);
+
+// on document is ready
+$(document).ready(() => {
+    // get all elements has data-toast attribute
+    $('[data-toast]').each(function () {
+        // on element click
+        $(this).click(function () {
+            // get content of toast
+            let content = $(this).data('toast');
+            let timeout = 3000;
+
+            // get toast timeout
+            if ($(this).data('timeout') !== undefined) {
+                timeout = $(this).data('timeout');
             }
-            log('ok')
-        }
-
-        // create toast function
-        $.toast = function (
-                content,
-                timeout = 5000,
-                _click = function () { },
-                _closed = function () { },
-                _mouse_enter = function () { },
-                _mouse_leave = function () { },
-            ) {
-            log('create new toast')
-
-            // Check if container exists
-            checkToastContainer()
 
             // create toast
-            var $toast = $('<div class="toast"></div>')
-
-            // set toast attributes
-            $toast.attr('isaeken-jquery-toast', 'true')
-
-            // hide toast
-            $toast.hide()
-
-            // set toast content
-            $toast.html(content);
-
-            // add toast to container
-            $toast_container.append($toast)
-
-            // create click event
-            $toast.click(function () {
-                log('toast clicked')
-                _click()
-                log('toast click functions completed')
-            })
-
-            // find close button if exists
-            $toast.find('.close').click(function () {
-                $toast.toastClose()
-            })
-
-            // create close timeout && create closed event
-            var closeTimeoutHandle = window.setTimeout(function () { $toast.toastClose(_closed()) }, timeout)
-
-            $toast
-                // stop timer if mouse enter && create mouse enter event
-                .mouseenter(function () {
-                    log('toast mouse entered')
-                    window.clearTimeout(closeTimeoutHandle);
-                    _mouse_enter()
-                    log('toast mouse enter functions completed')
-                })
-                // start timer if mouse leave && create mouse leave event && create closed event
-                .mouseleave(function () {
-                    log('toast mouse leaved')
-                    closeTimeoutHandle = window.setTimeout(function () { $toast.toastClose(_closed()) }, timeout);
-                    _mouse_leave()
-                    log('toast mouse leave functions completed')
-                })
-
-            // show toast
-            $toast.slideDown('fast')
-
-            // end
-            return this;
-        };
-
-        // toast close function
-        $.fn.toastClose = function (_event = function () { }) {
-            console.log('closing toast')
-            var $toast = $(this)
-            if (!$(this).attr('isaeken-jquery-toast') === 'true') return;
-            $toast.slideUp('fast')
-            _event()
-            console.log('toast close functions completed')
-        }
-
-        $.fn.toast = function () {
-            log('hello world')
-            return this;
-        };
-    }) (jQuery)
-
-    // on document is ready
-    $(document).ready(() => {
-        // get all elements has toast attr
-        $('[toast]').each(function () {
-            // on element click
-            $(this).click(function () {
-                // get content of toast
-                var $content = $(this).attr('toast')
-
-                // get toast timeout
-                if ($(this).attr('toast-timeout') !== undefined) var $timeout = $(this).attr('toast-timeout');
-                else $timeout = 5000;
-
-                // create toast
-                $.toast($content, $timeout)
-            })
-        });
+            $.toast(content, timeout);
+        })
     });
-}
+});
