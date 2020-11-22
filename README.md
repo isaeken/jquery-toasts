@@ -12,6 +12,8 @@ A simple & lightweight toast messages library
 
 ---
 
+![isaeken/jquery-toasts](https://raw.githubusercontent.com/isaeken/jquery-toasts/master/docs/img/ss.png)
+
 ## Installation
 You can install jquery-toasts plugin using npm or include directly files
 
