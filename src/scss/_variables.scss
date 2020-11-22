@@ -1,0 +1,47 @@
+// .toast-container
+$toast-container-z-index: 10000 !default;
+$toast-container-position: fixed !default;
+$toast-container-display: block !default;
+$toast-container-user-select: none !default;
+$toast-container-width: 280px !default;
+$toast-container-height: auto !default;
+$toast-container-align: 'top-right' !default;
+$toast-container-padding: (
+  'left': 0rem,
+  'right': 0rem,
+  'top': 0rem,
+  'bottom': 0rem,
+) !default;
+$toast-container-margin: (
+  'left': 10px,
+  'right': 10px,
+  'top': 0px,
+  'bottom': 10px,
+) !default;
+
+// .toast-container .toast
+$toast-position: relative !default;
+$toast-display: flex !default;
+$toast-user-select: none !default;
+$toast-width: auto !default;
+$toast-height: auto !default;
+$toast-max-width: 100% !default;
+$toast-min-height: 48px !default;
+$toast-margin: 10px 0 0 0 !default;
+$toast-padding: 0px 15px !default;
+$toast-align-items: center !default;
+$toast-justify-content: space-between !default;
+$toast-cursor: default !default;
+$toast-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !default;
+$toast-font-size: 1.1rem !default;
+$toast-font-weight: 300 !default;
+$toast-font-height: 1.5em !default;
+$toast-line-height: auto !default;
+$toast-color: #ffffff !default;
+$toast-background-color: #323232 !default;
+$toast-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2) !default;
+$toast-border: none !default;
+$toast-border-radius: 2px !default;
+
+// .toast-container .toast .toast-action
+$toast-action-color: #eeff41 !default;

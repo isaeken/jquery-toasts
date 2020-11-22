@@ -1,106 +1,65 @@
-/**
- *     @author İsa Eken <hello@isaeken.com.tr>
- *     @website https://isaeken.com.tr
- *     @github https://github.com/isaeken
- *     @name jquery.toast
- */
-
-/**
- * .toast-container
- */
-$toasts-container-align:  'top-right' !default;
-$toasts-container-padding: (
-        'left': 0rem,
-        'right': 0rem,
-        'top': 0rem,
-        'bottom': 0rem,
-) !default;
-$toasts-container-margin: (
-        'left': 0rem,
-        'right': 0rem,
-        'top': 0rem,
-        'bottom': 0rem,
-) !default;
-
-/**
- * .toast-container .toast
- */
-$toast-font-family:  'Helvetica Neue', Helvetica, Arial, sans-serif !default;
-$toast-font-size:     16px !default;
-$toast-line-height:   1.5 !default;
-$toast-cursor:        default !default;
-$toast-background:    rgba(0, 0, 0, 0.9) !default;
-$toast-foreground:    #ffffff !default;
-$toast-border:        none  !default;
-$toast-border-radius: .3rem !default;
-$toast-shadow:        0 4px 16px rgba(0, 0, 0, 0.4) !default;
-$toast-padding: (
-        'left':   1rem,
-        'right':  1rem,
-        'top':    0.6rem,
-        'bottom': 0.6rem,
-) !default;
-$toast-margin: (
-        'left':   1rem,
-        'right':  1rem,
-        'top':    1rem,
-        'bottom': 1rem,
-) !default;
+@import 'variables';
 
 .toast-container
 {
-  position: fixed;
-  display: block;
-  user-select: none;
-  @each $name, $padding in $toasts-container-padding {
+  z-index: $toast-container-z-index;
+  position: $toast-container-position;
+  display: $toast-container-display;
+  user-select: $toast-container-user-select;
+  width: $toast-container-width;
+  height: $toast-container-height;
+
+  @if $toast-container-align == 'top-left' { top: 0; left: 0; }
+  @else if $toast-container-align == 'top-right' { top: 0; right: 0; }
+  @else if $toast-container-align == 'bottom-left' { bottom: 0; left: 0; }
+  @else if $toast-container-align == 'bottom-right' { bottom: 0; right: 0; }
+
+  @each $name, $padding in $toast-container-padding {
     padding-#{$name}: $padding;
   }
-  @each $name, $margin in $toasts-container-margin {
+  @each $name, $margin in $toast-container-margin {
     margin-#{$name}: $margin;
-  }
-  @if $toasts-container-align == 'top-left' {
-    top: 0; left: 0;
-  }
-  @elseif $toasts-container-align == 'top-right' {
-    top: 0; right: 0;
-  }
-  @elseif $toasts-container-align == 'bottom-left' {
-    bottom: 0; left: 0;
-  }
-  @elseif $toasts-container-align == 'bottom-right' {
-    bottom: 0; right: 0;
   }
 
   .toast
   {
-    font-family:      $toast-font-family;
-    font-size:        $toast-font-size;
-    line-height:      $toast-line-height;
-    background-color: $toast-background;
-    color:            $toast-foreground;
-    border:           $toast-border;
-    border-radius:    $toast-border-radius;
-    box-shadow:       $toast-shadow;
-    cursor:           $toast-cursor;
+    position: $toast-position;
+    display: $toast-display;
+    top: 40px;
+    width: $toast-width;
+    height: $toast-height;
+    max-width: $toast-max-width;
+    min-height: $toast-min-height;
+    margin: $toast-margin;
+    padding: $toast-padding;
+    align-items: $toast-align-items;
+    justify-content: $toast-justify-content;
+    cursor: $toast-cursor;
+    font-family: $toast-font-family;
+    font-size: $toast-font-size;
+    font-weight: $toast-font-weight;
+    line-height: $toast-line-height;
+    color: $toast-color;
+    background-color: $toast-background-color;
+    box-shadow: $toast-box-shadow;
+    border: $toast-border;
+    border-radius: $toast-border-radius;
 
-    @each $name, $padding in $toast-padding {
-      padding-#{$name}: $padding;
-    }
-    @each $name, $margin in $toast-margin {
-      margin-#{$name}: $margin;
-    }
-
-    .close
+    .toast-action
     {
       position: relative;
       display: inline-block;
+      background-color: rgba(255, 255, 255, 0.05);
       cursor: pointer;
-      background-color: lighten($toast-background, 15);
-      border-radius: .3rem;
-      color: $toast-foreground;
-      margin-left: .5rem;
-      margin-right: -.5rem;
-      padding: 0 .5rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 2px;
+      color: $toast-action-color;
+      font-weight: 500;
+      transition: .2s background-color;
+      &:hover, &:focus, &:active
+      {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
     }
   }
 }
