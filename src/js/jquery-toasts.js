@@ -1,9 +1,8 @@
-/**
- *     @author İsa Eken <hello@isaeken.com.tr>
- *     @website https://isaeken.com.tr
- *     @github https://github.com/isaeken
- *     @name jquery.toast
- */
+// jquery-toasts 1.1.0
+// (c) 2020 İsa Eken
+// jquery-toasts may be freely distributed under the MIT license.
+// For all details and documentation:
+// https://github.com/isaeken/jquery-toasts
 
 /**
  * throw an error if jquery is not initialized
@@ -12,7 +11,16 @@ if (!window.jQuery) {
     throw 'jquery-toasts is requires jquery!';
 }
 
+/**
+ * throw an error if anime.js is not initialized
+ */
+if (typeof anime !== 'function') {
+    throw 'jquery-toasts is requires anime.js!';
+}
+
 (function ($) {
+    'use strict';
+
     /**
      * toast container
      * @type {jQuery.fn.init|jQuery|HTMLElement}
@@ -38,7 +46,7 @@ if (!window.jQuery) {
     }
 
     /**
-     * Create toast function
+     * create toast function
      * @param content
      * @param {int} timeout
      * @param {function} click
@@ -58,52 +66,153 @@ if (!window.jQuery) {
         // initialize toasts
         initializeToasts();
 
-        // create a toast element
+        /**
+         * create toast element
+         * @type {jQuery.fn.init|jQuery|HTMLElement}
+         */
         const $toast = $('<div class="toast"></div>');
 
+        /**
+         * options
+         * @type {{panning: boolean, currentPosition: number, closeTolerance: number, closed: boolean, position: null, opacity: number, transition: jQuery, mouseDownPosition: number}}
+         */
+        let options = {
+            panning: false,
+            closed: false,
+            closeTolerance: 35,
+            transition: $toast.css('transition'),
+            position: null,
+            mouseDownPosition: 0,
+            currentPosition: 0,
+            opacity: 1,
+        };
+
         // set toast defaults
-        $toast.attr('isaeken-jquery-toast', 'true').hide().html(content);
+        $toast.attr('isaeken-jquery-toast', 'true').html(content);
 
         // add toast to container
         container.append($toast);
 
-        // find close button if exists
-        $toast.find('.close').click(function () {
-            $toast.toastClose();
+        // set close button click event if exists
+        $toast.children('.close').click(function () {
+            $toast.toastClose(() => closed());
         });
 
-        // create close timeout && create closed event
+        // create close timeout
         let closeTimeoutHandle = window.setTimeout(function () {
-            $toast.toastClose(function () {
-                closed();
-            });
+            $toast.toastClose(() => closed());
         }, timeout);
 
         // add events to toast
         $toast
-            .on('click', function () {
-                click();
-            })
-            .on('mouseenter', function () {
-                // reset timeout
-                window.clearTimeout(closeTimeoutHandle);
-                mouseEnter();
-            })
-            .on('mouseleave', function () {
-                // start time to close
-                closeTimeoutHandle = window.setTimeout(function () {
-                    $toast.toastClose(function () {
-                        closed();
-                    });
-                }, timeout);
-                mouseLeave();
-            });
+            .on('click', (event) => _click(event))
+            .on('mouseenter', (event) => _mouseEnter(event))
+            .on('mouseleave', (event) => _mouseLeave(event))
+            .on('touchstart', (event) => _mouseDown(event))
+            .on('touchmove', (event) => _mouseMove(event))
+            .on('touchend', (event) => _mouseUp(event))
+            .on('mousedown', (event) => _mouseDown(event))
+            .on('mouseup', (event) => _mouseUp(event))
+            .on('mousemove', (event) => _mouseMove(event));
 
-        // show toast
-        $toast.slideDown('fast');
+        // reset panning function
+        function _resetPan() {
+            options.panning = false;
+            options.closed = false;
 
-        // return self for chained functions
-        return this;
+            // reset css
+            $toast.css({
+                transition: options.transition,
+                transform: `translateX(0)`,
+                opacity: 1,
+            }).removeClass('panning');
+        }
+
+        // click function
+        function _click(event) {
+            // execute custom click event if its not panning
+            if (!options.panning) {
+                click(event);
+            }
+        }
+
+        // mouse enter function
+        function _mouseEnter(event) {
+            // close if not closed
+            if (options.closed) $toast.toastClose(() => closed());
+
+            // reset timeout
+            window.clearTimeout(closeTimeoutHandle);
+
+            // execute custom mouse enter function
+            mouseEnter();
+        }
+
+        // mouse leave function
+        function _mouseLeave(event) {
+            // start time to close
+            closeTimeoutHandle = window.setTimeout(function () {
+                $toast.toastClose(() => closed());
+            }, timeout);
+
+            // execute custom mouse leave function
+            mouseLeave();
+
+            // reset pan
+            _resetPan();
+        }
+
+        // mouse down function
+        function _mouseDown(event) {
+            // set panning
+            options.panning = true;
+
+            // set default options
+            options.transition = $toast.css('transition');
+            options.position = $toast.position();
+            options.mouseDownPosition = event.pageX;
+
+            // set css
+            $toast.addClass('panning').css('transition', 'none');
+        }
+
+        // mouse up function
+        function _mouseUp(event) {
+            if (options.closed) $toast.toastClose(() => closed());
+            else _resetPan();
+        }
+
+        // mouse move function
+        function _mouseMove(event) {
+            // check pan status
+            if (options.panning) {
+                // set current mouse position
+                options.currentPosition = options.mouseDownPosition - event.pageX;
+
+                // cancel other events
+                event.preventDefault();
+
+                // set css
+                $toast.css({
+                    transform: `translateX(${0 - options.currentPosition}px)`,
+                    opacity: 1 - (Math.abs(options.currentPosition / options.mouseDownPosition) * 8),
+                });
+
+                // set closed status
+                options.closed = ((options.currentPosition > options.closeTolerance) || (0 - options.currentPosition > options.closeTolerance)) === true;
+            }
+        }
+
+        // show toast with animation
+        anime({
+            targets: $toast[0],
+            top: 0,
+            opacity: 1,
+            duration: 300,
+            easing: 'easeOutCubic',
+        });
+
+        return $toast;
     };
 
     // toast close function
@@ -114,22 +223,38 @@ if (!window.jQuery) {
             return;
         }
 
+        // set toast to $toast
+        const $toast = $(this);
+
+        let marginTop = parseInt($toast.css('marginTop').replace('px', ''));
+        let marginBottom = parseInt($toast.css('marginTop').replace('px', ''));
+        let height = $toast.outerHeight();
+
         // close toast
-        $(this).slideUp('fast');
+        anime({
+            targets: $toast[0],
+            opacity: 0,
+            marginTop: '-' + height + 'px',
+            duration: 375,
+            easing: 'easeOutExpo',
+            complete: () => {
+                // check if callback is a function
+                if (typeof callback === 'function') {
+                    // execute callback function
+                    callback();
+                }
+                // remove toast from document
+                $toast.remove();
+            }
+        });
 
-        // check if callback is a function
-        if (typeof callback === 'function') {
-            // execute callback function
-            callback();
-        }
-
-        // return self for chained functions
-        return this;
+        return $;
     };
 
     // add toasts plugin to jquery
     $.fn.toast = function () { return this; };
     window.jQuery = $;
+
 }) (jQuery);
 
 // on document is ready

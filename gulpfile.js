@@ -2,8 +2,8 @@
 var gulp          = require('gulp'),
     jshint        = require('gulp-jshint'),
     rename        = require('gulp-rename'),
-    uglify        = require('gulp-uglify'),
     saveLicense   = require('uglify-save-license'),
+    uglify        = require('gulp-uglify'),
     babel         = require("gulp-babel"),
     postcss       = require('gulp-postcss'),
     cleanCSS      = require('gulp-clean-css'),
@@ -19,14 +19,18 @@ var Server        = require('karma').Server;
 var browserSync   = require('browser-sync').create();
 
 // Specify the Source files
-var SRC_JS        = 'src/js/jquery-toasts.js';
+var SRC_JS        = 'src/js/*.js';
 var SRC_CSS       = 'src/css/*.css';
-var SRC_SCSS      = 'src/scss/jquery-toasts.scss';
+var SRC_SCSS      = 'src/scss/*.scss';
 
 // Specify the Destination folders
 var DEST_JS       = 'dist/js';
 var DEST_CSS      = 'dist/css';
 var DEST_SCSS     = 'dist/css';
+
+var DEST_DOCS_JS = 'docs/js';
+var DEST_DOCS_CSS = 'docs/css';
+var DEST_DOCS_SCSS = 'docs/css';
 
 // Example pages
 var EXAMPLE_HTML  = 'docs/*.html';
@@ -38,6 +42,7 @@ function build_js(cb) {
             presets: ['@babel/env']
         }))
         .pipe(gulp.dest(DEST_JS))
+        .pipe(gulp.dest(DEST_DOCS_JS))
         .pipe(uglify({
             output: {
                 comments: saveLicense
@@ -46,7 +51,8 @@ function build_js(cb) {
         .pipe(rename({
             suffix: '.min'
         }))
-        .pipe(gulp.dest(DEST_JS));
+        .pipe(gulp.dest(DEST_JS))
+        .pipe(gulp.dest(DEST_DOCS_JS));
 
     cb();
 }
@@ -57,9 +63,11 @@ function build_css(cb) {
         .pipe(postcss( [autoprefixer()] ))
         .pipe(cssbeautify({ autosemicolon: true }))
         .pipe(gulp.dest(DEST_CSS))
+        .pipe(gulp.dest(DEST_DOCS_CSS))
         .pipe(cleanCSS({compatibility: 'ie8'}))
         .pipe(rename({suffix: '.min'}))
-        .pipe(gulp.dest(DEST_CSS));
+        .pipe(gulp.dest(DEST_CSS))
+        .pipe(gulp.dest(DEST_DOCS_CSS));
 
     cb();
 }
@@ -69,9 +77,11 @@ function build_scss(cb) {
     gulp.src(SRC_SCSS)
         .pipe(sass({outputStyle:'expanded'}).on('error', sass.logError))
         .pipe(gulp.dest(DEST_SCSS))
+        .pipe(gulp.dest(DEST_DOCS_SCSS))
         .pipe(minifyCss())
         .pipe(rename({ extname: '.min.css' }))
-        .pipe(gulp.dest(DEST_SCSS));
+        .pipe(gulp.dest(DEST_SCSS))
+        .pipe(gulp.dest(DEST_DOCS_SCSS));
 
     cb();
 }
@@ -87,13 +97,13 @@ function lint_js(cb) {
 
 // CLEAN
 function clean_js(cb) {
-    del.sync([DEST_JS]);
+    del.sync([DEST_JS, DEST_DOCS_JS]);
 
     cb();
 }
 
 function clean_css(cb) {
-    del.sync([DEST_CSS]);
+    del.sync([DEST_CSS, DEST_DOCS_CSS]);
 
     cb();
 }
@@ -112,8 +122,8 @@ function serve(cb) {
     // Serve files from the root of this project
     browserSync.init({
         server: {
-            baseDir: './',
-            index: "docs/index.html"
+            baseDir: './docs',
+            index: "index.html"
         }
     });
 

@@ -1,6 +1,6 @@
 {
   "name": "jquery-toasts",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A simple & lightweight toast messages library",
   "homepage": "https://github.com/isaeken/jquery-toasts",
   "license": "MIT",
@@ -13,6 +13,7 @@
     "url": "https://github.com/isaeken/jquery-toasts/issues"
   },
   "dependencies": {
+    "animejs": "^3.2.1",
     "jquery": ">=3.5.0"
   },
   "devDependencies": {
@@ -31,8 +32,8 @@
     "gulp-postcss": "^8.0.0",
     "gulp-rename": "^2.0.0",
     "gulp-sass": "^4.0.2",
-    "gulp-uglify": "^3.0.2",
     "gulp-sourcemaps": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
     "jasmine-core": "^3.5.0",
     "jasmine-jquery": "^2.1.1",
     "jshint": "^2.11.0",
